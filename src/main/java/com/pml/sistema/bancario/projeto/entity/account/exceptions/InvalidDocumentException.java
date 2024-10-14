@@ -1,7 +1,19 @@
 package com.pml.sistema.bancario.projeto.entity.account.exceptions;
 
-public class InvalidDocumentException extends Throwable {
+import java.io.Serial;
 
-    public InvalidDocumentException(String s) {
+public class InvalidDocumentException extends Exception {
+
+    @Serial
+    private static final long serialVersionUID = 1L;
+
+
+    public InvalidDocumentException(String message) {
+        super(message);
+    }
+
+
+    public InvalidDocumentException() {
+        super("Documento inválido.");
     }
 }
