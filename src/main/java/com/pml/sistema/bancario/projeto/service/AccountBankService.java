@@ -36,10 +36,12 @@ public class AccountBankService {
             throw new IllegalArgumentException("accountDTO não pode ser nulo");
         }
         Integer score = gerarScoreAleatorio();
-
         AccountBank accountBank = new AccountBank(1234, docNumber, score);
+        AccountCreditCard accountCreditCard = new AccountCreditCard(accountBank);
         accountBank.getAccountCreditCard().limitCard(score);
         accountBank.getAccountSpecialCheck().limitCheck(score);
+        accountCreditCard.limitCard(accountBank.getScore());
+        accountBank.setAccountCreditCard(accountCreditCard);
         return repository.save(accountBank);
     }
 

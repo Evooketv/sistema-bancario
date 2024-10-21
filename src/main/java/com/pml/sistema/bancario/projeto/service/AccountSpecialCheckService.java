@@ -22,8 +22,7 @@ import static com.pml.sistema.bancario.projeto.service.AccountBankService.gerarS
 @AllArgsConstructor
 @Service
 public class AccountSpecialCheckService {
-
-    private Integer score;
+    
 
     @Autowired
     private AccountSpecialCheckRepository repository;

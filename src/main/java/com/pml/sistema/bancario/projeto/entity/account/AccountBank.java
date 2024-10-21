@@ -9,6 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
+import org.springframework.beans.factory.annotation.Autowired;
 
 import static com.pml.sistema.bancario.projeto.service.AccountBankService.gerarContaAleatorio;
 
@@ -18,6 +19,7 @@ import static com.pml.sistema.bancario.projeto.service.AccountBankService.gerarC
 @NoArgsConstructor
 @AllArgsConstructor
 @Entity
+
 @Table(name = "account_bank")
 
 public class AccountBank {
@@ -34,6 +36,8 @@ public class AccountBank {
 
     @Column(nullable = false)
     private Integer score;
+
+
 
     @Enumerated(EnumType.STRING)
     private AccountType accountType;
@@ -80,6 +84,11 @@ public class AccountBank {
         } else if (docNumber.length() == 14) {
             this.accountType = AccountType.CNPJ_CONTA_PESSOA_JURIDICA;
         }
+    }
+
+    public Integer getScore() {
+        return score;
+
     }
 
 }
