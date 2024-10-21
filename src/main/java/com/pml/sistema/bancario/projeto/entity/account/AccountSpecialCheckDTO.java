@@ -6,13 +6,12 @@ import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 
-//@Getter
-//@Setter
-//@NoArgsConstructor
-//@AllArgsConstructor
-
-public class AccountLimitDTO {
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+public class AccountSpecialCheckDTO {
 
     private Float chequeEspecial;
-    private Float cartaoCredito;
+    private Integer score;
 }

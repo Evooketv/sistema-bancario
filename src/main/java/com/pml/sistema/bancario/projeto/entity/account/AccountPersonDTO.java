@@ -15,12 +15,8 @@ public class AccountPersonDTO {
 
     private AccountType accountType;
     private String documentNumber;
-    private Integer numeroConta;
-    private Integer agencia;
     private String person;
     private Integer age;
     private String address;
-    private Float chequeEspecial;
-    private Float cartaoCredito;
 
 }

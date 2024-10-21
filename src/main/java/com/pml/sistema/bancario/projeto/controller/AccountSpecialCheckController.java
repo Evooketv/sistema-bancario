@@ -1,9 +1,9 @@
 package com.pml.sistema.bancario.projeto.controller;
 
-import com.pml.sistema.bancario.projeto.entity.account.AccountPerson;
-import com.pml.sistema.bancario.projeto.entity.account.AccountPersonDTO;
+import com.pml.sistema.bancario.projeto.entity.account.AccountSpecialCheck;
+import com.pml.sistema.bancario.projeto.entity.account.AccountSpecialCheckDTO;
 import com.pml.sistema.bancario.projeto.entity.account.exceptions.InvalidDocumentException;
-import com.pml.sistema.bancario.projeto.service.AccountPersonService;
+import com.pml.sistema.bancario.projeto.service.AccountSpecialCheckService;
 import jakarta.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -15,21 +15,21 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 
+
 @ResponseBody
 @RestController
-@RequestMapping("/person")
+@RequestMapping("/check")
 @CrossOrigin(origins = "*")
 
-public class AccountPersonController {
+public class AccountSpecialCheckController {
 
     @Autowired
-    private AccountPersonService service;
-
+    private AccountSpecialCheckService service;
 
     @PostMapping
-    public ResponseEntity<?> createAccount(@Valid @RequestBody AccountPersonDTO accountDTO) {
+    public ResponseEntity<?> createAccount(@Valid @RequestBody AccountSpecialCheckDTO accountDTO) {
         try {
-            AccountPerson newAccount = this.service.createAccount(accountDTO);
+            AccountSpecialCheck newAccount = this.service.createAccount(accountDTO);
             return ResponseEntity.status(HttpStatus.CREATED).body(newAccount);
         } catch (InvalidDocumentException e) {
             return ResponseEntity.badRequest().body("Número de documento inválido: " + e.getMessage());
@@ -39,12 +39,12 @@ public class AccountPersonController {
     }
 
     @PutMapping("/{id}")
-    public ResponseEntity<AccountPerson> update(@PathVariable("id") String id, @RequestBody AccountPersonDTO accountDTO) {
-        if (accountDTO == null || accountDTO.getDocumentNumber() == null || accountDTO.getPerson() == null) {
+    public ResponseEntity<AccountSpecialCheck> update(@PathVariable("id") String id, @RequestBody AccountSpecialCheckDTO accountDTO) {
+        if (accountDTO == null || accountDTO.getChequeEspecial() == null ) {
             return ResponseEntity.badRequest().body(null);
         }
         try {
-            AccountPerson updatedAccount = this.service.updateAccount(Long.valueOf(id), accountDTO);
+            AccountSpecialCheck updatedAccount = this.service.updateAccount(Long.valueOf(id), accountDTO);
             return ResponseEntity.ok(updatedAccount);
         } catch (AccountNotFoundException e) {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(null);
@@ -54,8 +54,8 @@ public class AccountPersonController {
     }
 
     @GetMapping
-    public ResponseEntity<List<AccountPerson>> getAll() {
-        List<AccountPerson> accounts = this.service.getAll();
+    public ResponseEntity<List<AccountSpecialCheck>> getAll() {
+        List<AccountSpecialCheck> accounts = this.service.getAll();
         return ResponseEntity.ok().body(accounts);
     }
 
@@ -67,7 +67,7 @@ public class AccountPersonController {
             return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(errorResponse);
         }
         try {
-            AccountPerson account = this.service.findById(Long.valueOf(id));
+            AccountSpecialCheck account = this.service.findById(Long.valueOf(id));
             return ResponseEntity.ok(account);
         } catch (AccountNotFoundException e) {
             Map<String, String> errorResponse = new HashMap<>();
@@ -75,7 +75,6 @@ public class AccountPersonController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body(errorResponse);
         }
     }
-
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> delete(@PathVariable("id") String id) {
@@ -95,4 +94,5 @@ public class AccountPersonController {
         return ResponseEntity.ok("CORS is working!");
     }
 }
+
 

@@ -1,20 +1,21 @@
 package com.pml.sistema.bancario.projeto.service;
 
-import com.pml.sistema.bancario.projeto.entity.account.AccountPerson;
-import com.pml.sistema.bancario.projeto.entity.account.AccountPersonDTO;
+import com.pml.sistema.bancario.projeto.entity.account.*;
 import com.pml.sistema.bancario.projeto.entity.account.exceptions.InvalidDocumentException;
-import com.pml.sistema.bancario.projeto.repositories.AccountRepository;
+import com.pml.sistema.bancario.projeto.repositories.AccountPersonRepository;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
-
+import org.springframework.beans.factory.annotation.Value;
 import javax.security.auth.login.AccountNotFoundException;
 import java.util.List;
-import java.util.Random;
+import static com.pml.sistema.bancario.projeto.service.AccountBankService.gerarContaAleatorio;
+import static com.pml.sistema.bancario.projeto.service.AccountBankService.gerarScoreAleatorio;
+
+
 
 @Getter
 @Setter
@@ -25,42 +26,40 @@ public class AccountPersonService {
 
     @Value("${banco.agencia}")
     private Integer agencia;
-    private String person;
 
     @Autowired
-    private AccountRepository repository;
+    private AccountPersonRepository repository;
+
+    @Autowired
+    private AccountBankService accountBankService;
 
     public AccountPerson createAccount(AccountPersonDTO accountDTO) throws InvalidDocumentException {
-        AccountPerson account = new AccountPerson(accountDTO, accountDTO.getAgencia(), accountDTO.getPerson());
-        return repository.save(account);
+        AccountPerson accountPerson = new AccountPerson(accountDTO, accountDTO.getPerson());
+        AccountBank accountBank = new AccountBank();
+        AccountCreditCard accountCreditCard = new AccountCreditCard();
+        AccountSpecialCheck accountSpecialCheck = new AccountSpecialCheck();
+        accountBank.setNumeroConta(gerarContaAleatorio());
+        accountBank.setAgencia(agencia);
+        accountBank.setScore(gerarScoreAleatorio());
+        accountBank.setAccountCreditCard(accountCreditCard);
+        accountBank.setAccountSpecialCheck(accountSpecialCheck);
+        accountPerson.setBankAccount(accountBank);
+        return repository.save(accountPerson);
+
     }
-
-    public static int gerarScoreAleatorio() {
-        Random random = new Random();
-        return random.nextInt(10);
-    }
-
-
-    public static String gerarContaAleatorio() {
-        Random random = new Random();
-        int numero = random.nextInt(1000000);
-        return String.format("%06d", numero);
-    }
-
 
     public List<AccountPerson> getAll() {
         return this.repository.findAll();
     }
 
     public AccountPerson findById(Long id) throws AccountNotFoundException {
-        AccountPerson account = this.repository.findById(id)
+        return this.repository.findById(id)
                 .orElseThrow(() -> new AccountNotFoundException("Conta não encontrada: " + id));
-        return account;
     }
 
     public void deleteAccount(Long id) throws AccountNotFoundException {
         AccountPerson account = this.repository.findById(id)
-                .orElseThrow(() -> new AccountNotFoundException("Account not found"));
+                .orElseThrow(() -> new AccountNotFoundException("Conta não encontrada: " + id));
         repository.deleteById(id);
     }
 
@@ -71,7 +70,6 @@ public class AccountPersonService {
 
         AccountPerson existingAccount = this.repository.findById(id)
                 .orElseThrow(() -> new AccountNotFoundException("Conta não encontrada: " + id));
-
 
         if (accountDTO.getDocumentNumber() != null) {
             existingAccount.setDocumentNumber(accountDTO.getDocumentNumber());
@@ -88,7 +86,6 @@ public class AccountPersonService {
 
         return this.repository.save(existingAccount);
     }
-
 }
 
 
