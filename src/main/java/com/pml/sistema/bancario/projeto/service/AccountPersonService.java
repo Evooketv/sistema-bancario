@@ -15,8 +15,6 @@ import java.util.List;
 import static com.pml.sistema.bancario.projeto.service.AccountBankService.gerarContaAleatorio;
 import static com.pml.sistema.bancario.projeto.service.AccountBankService.gerarScoreAleatorio;
 
-
-
 @Getter
 @Setter
 @NoArgsConstructor

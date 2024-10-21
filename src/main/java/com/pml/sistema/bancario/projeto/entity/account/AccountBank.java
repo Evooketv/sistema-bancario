@@ -9,7 +9,7 @@ import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
 import lombok.Setter;
-import org.springframework.beans.factory.annotation.Autowired;
+
 
 import static com.pml.sistema.bancario.projeto.service.AccountBankService.gerarContaAleatorio;
 
@@ -36,7 +36,6 @@ public class AccountBank {
 
     @Column(nullable = false)
     private Integer score;
-
 
 
     @Enumerated(EnumType.STRING)
