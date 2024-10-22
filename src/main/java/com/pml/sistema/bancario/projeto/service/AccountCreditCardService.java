@@ -27,17 +27,19 @@ public class AccountCreditCardService {
     @Autowired
     private AccountBankRepository accountBankRepository;
 
+    AccountBank accountBank = new AccountBank();
+
     public AccountCreditCard createAccount(AccountCreditCardDTO accountDTO) throws InvalidDocumentException {
         if (accountDTO == null) {
             throw new IllegalArgumentException("accountDTO não pode ser nulo");
         }
-
-        AccountBank accountBank = accountBankRepository.findById(Long.valueOf(accountDTO.getAccountBankId()))
-                .orElseThrow(() -> new IllegalArgumentException("Conta bancária não encontrada"));
-
+        if (accountBank == null) {
+            throw new IllegalArgumentException("accountBank não pode ser nulo");
+        }
 
         AccountCreditCard creditCard = new AccountCreditCard(accountBank);
-        creditCard.setCartCredit(limitCard(accountBank.getScore()));
+
+        creditCard.setCartCredit(creditCard.limitCard(accountBank.getScore()));
 
         return repository.save(creditCard);
     }

@@ -4,8 +4,11 @@ import com.pml.sistema.bancario.projeto.entity.account.AccountBank;
 import com.pml.sistema.bancario.projeto.entity.account.AccountBankDTO;
 import com.pml.sistema.bancario.projeto.entity.account.AccountCreditCard;
 import com.pml.sistema.bancario.projeto.entity.account.AccountSpecialCheck;
+import com.pml.sistema.bancario.projeto.entity.account.enums.AccountType;
 import com.pml.sistema.bancario.projeto.entity.account.exceptions.InvalidDocumentException;
 import com.pml.sistema.bancario.projeto.repositories.AccountBankRepository;
+import jakarta.persistence.EnumType;
+import jakarta.persistence.Enumerated;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
@@ -31,17 +34,28 @@ public class AccountBankService {
     @Autowired
     private AccountBankRepository repository;
 
+    @Enumerated(EnumType.STRING)
+    private AccountType accountType;
+
     public AccountBank createAccount(AccountBankDTO accountDTO, String docNumber) throws InvalidDocumentException {
         if (accountDTO == null) {
             throw new IllegalArgumentException("accountDTO não pode ser nulo");
         }
+
         Integer score = gerarScoreAleatorio();
+
         AccountBank accountBank = new AccountBank(1234, docNumber, score);
+        accountBank.setAccountType(docNumber);
+
         AccountCreditCard accountCreditCard = new AccountCreditCard(accountBank);
-        accountBank.getAccountCreditCard().limitCard(score);
-        accountBank.getAccountSpecialCheck().limitCheck(score);
-        accountCreditCard.limitCard(accountBank.getScore());
+        accountCreditCard.limitCard(score);
         accountBank.setAccountCreditCard(accountCreditCard);
+
+        AccountSpecialCheck accountSpecialCheck = new AccountSpecialCheck(accountBank);
+        accountSpecialCheck.limitCheck(score);
+        accountBank.setAccountSpecialCheck(accountSpecialCheck);
+
+
         return repository.save(accountBank);
     }
 

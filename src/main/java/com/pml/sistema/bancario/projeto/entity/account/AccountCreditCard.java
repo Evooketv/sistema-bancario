@@ -2,7 +2,6 @@ package com.pml.sistema.bancario.projeto.entity.account;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
-import com.fasterxml.jackson.annotation.JsonInclude;
 import jakarta.persistence.*;
 import lombok.AllArgsConstructor;
 import lombok.Getter;
@@ -33,7 +32,7 @@ public class AccountCreditCard {
         limitCard(accountBank.getScore());
     }
 
-    public void limitCard(Integer score) {
+    public float limitCard(Integer score) {
         if (score == 0 || score == 1) {
             this.cartCredit = 0F;
         } else if (score >= 2 && score <= 5) {
@@ -43,6 +42,7 @@ public class AccountCreditCard {
         } else if (score == 9) {
             this.cartCredit = 15000F;
         }
+        return 0;
     }
 
 }

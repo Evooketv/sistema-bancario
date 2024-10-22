@@ -27,6 +27,17 @@ public class AccountSpecialCheckService {
     @Autowired
     private AccountSpecialCheckRepository repository;
 
+    public AccountSpecialCheck createAccount(@Valid AccountSpecialCheckDTO accountDTO) throws InvalidDocumentException {
+        Integer score = gerarScoreAleatorio();
+        AccountBank accountBank = new AccountBank();
+        accountBank.setScore(score);
+
+        AccountSpecialCheck specialCheck = new AccountSpecialCheck();
+        specialCheck.setAccountBank(accountBank);
+
+        return repository.save(specialCheck);
+    }
+
 
     public List<AccountSpecialCheck> getAll() {
         return this.repository.findAll();
@@ -44,16 +55,7 @@ public class AccountSpecialCheckService {
         repository.deleteById(id);
     }
 
-    public AccountSpecialCheck createAccount(@Valid AccountSpecialCheckDTO accountDTO) throws InvalidDocumentException {
-        Integer score = gerarScoreAleatorio();
-        AccountBank accountBank = new AccountBank();
-        accountBank.setScore(score);
 
-        AccountSpecialCheck specialCheck = new AccountSpecialCheck();
-        specialCheck.setAccountBank(accountBank); // Associar o accountBank ao cheque especial
-
-        return repository.save(specialCheck);  // Salvar a conta de cheque especial
-    }
 
     public AccountSpecialCheck updateAccount(Long id, AccountSpecialCheckDTO accountDTO) throws AccountNotFoundException, InvalidDocumentException {
         if (id == null) {

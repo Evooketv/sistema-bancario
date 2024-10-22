@@ -28,10 +28,15 @@ public class AccountCreditCardController {
     public ResponseEntity<?> createAccount(@Valid @RequestBody AccountCreditCardDTO accountDTO) {
         try {
             AccountCreditCard newAccount = this.service.createAccount(accountDTO);
+
             return ResponseEntity.status(HttpStatus.CREATED).body(newAccount);
+
         } catch (InvalidDocumentException e) {
+
             return ResponseEntity.badRequest().body("Número de documento inválido: " + e.getMessage());
+
         } catch (Exception e) {
+
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR).body("Erro ao criar a conta: " + e.getMessage());
         }
     }
@@ -85,7 +90,6 @@ public class AccountCreditCardController {
             return ResponseEntity.badRequest().build();
         }
     }
-
 
     @GetMapping("/test")
     public ResponseEntity<String> test() {

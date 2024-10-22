@@ -45,7 +45,8 @@ public class AccountPerson {
 
         Integer score = gerarScoreAleatorio();
 
-        this.bankAccount = new AccountBank(1234, docNumber, score); // Atribui o score gerado
+        this.bankAccount = new AccountBank(1234, docNumber, score);
+
 
     }
 }
